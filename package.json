@@ -1,0 +1,18 @@
+{
+    "name": "entregai",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "start": "node src/app.js",
+        "dev": "nodemon src/app.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^5.1.0",
+        "mongoose": "^8.15.0"
+    }
+}
