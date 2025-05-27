@@ -1,19 +1,14 @@
 import { Router } from 'express';
 import userModel from '../models/user.model.js'
-import { createHash, isValidPassword, generateJWToken } from '../utils.js';
+import { isValidPassword, generateJWToken } from '../utils.js';
 import passport from 'passport';
 
 const router = Router();
 
-
 // Register
-router.post('/register', passport.authenticate('register', { failureRedirect: '/api/sessions/fail-register' }), async (req, res) => {
+router.post('/register', passport.authenticate('register', { failureRedirect: '/api/sessions/fail-register', session: false }), async (req, res) => {
     res.send({ status: "success", message: "Usuario creado con exito" });
 })
-
-
-
-
 
 // Login
 router.post('/login', async (req, res) => {
@@ -41,13 +36,10 @@ router.post('/login', async (req, res) => {
         const access_token = generateJWToken(tokenUser);
         console.log(access_token);
 
-
-
         //Creamos la cookie y almacenamos el access_token en la cookie
         res.cookie('jwtCookieToken', access_token, {
             maxAge: 60000,
             httpOnly: true //No se expone la cookie
-            //httpOnly: false //Sí se expone la cookie
         })
         
         res.send({ status: "login success" });
@@ -64,10 +56,5 @@ router.get("/fail-register", (req, res) => {
 router.get("/fail-login", (req, res) => {
     res.status(401).send({ error: "Failed to process login!" });
 });
-
-
-
-
-
 
 export default router;

@@ -6,11 +6,11 @@ const schema = new mongoose.Schema(
     {
         first_name: {
             type: String,
-            required: true
+            required: [true, "Nombre es requerido"],
         },
         last_name: {
             type: String,
-            required: true
+            required: [true, "Apellido es requerido"],
         },
         email: {
             type: String,
@@ -19,21 +19,23 @@ const schema = new mongoose.Schema(
         },
         age: {
             type: Number,
-            required: true
+            required: [true, "Edad es requerida"],
         },
         password: {
             type: String,
-            required: true
+            required: [true, "Contraseña es requerido"],
+        },
+        cart: {
+            type: String,
+            required: true,
+            default: 'cartID1'
+        },
+        role: {
+            type: String,
+            required: true,
+            default: 'user',
+            enum: ['user', 'admin']
         }
-        // cart: {
-        //     type: String,
-        //     required: true
-        // },
-        // role: {
-        //     type: String,
-        //     required: true,
-        //     default: 'user'
-        // }
     },
     {
         timestamps: true

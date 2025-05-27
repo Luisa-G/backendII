@@ -2,9 +2,7 @@ import passport from "passport";
 import passportLocal from "passport-local";
 import jwtStrategy from 'passport-jwt';
 import userModel from "../models/user.model.js";
-import { PRIVATE_KEY, createHash, isValidPassword } from "../utils.js";
-
-
+import { PRIVATE_KEY, createHash } from "../utils.js";
 
 //Declaramos la estrategia
 const localStrategy = passportLocal.Strategy;
@@ -13,12 +11,9 @@ const localStrategy = passportLocal.Strategy;
 const JwtStrategy = jwtStrategy.Strategy;
 const ExtractJWT = jwtStrategy.ExtractJwt;
 
-
-
 /**
  * Función para inicializar Passport y definir las estrategias de autenticacion
  */
-
 const initializePassport = () =>{
     /**
      * Inicializando la estrategia local, username sera para nosotros email.
@@ -31,13 +26,12 @@ const initializePassport = () =>{
             passReqToCallback: true, //Permite acceder al objeto 'req' dentro de la función de autenticación
             usernameField: 'email' //Definimos el "username" que será el campo "email"
         },
-
         /**
          * Callback de la autenticación
          * Recibe el erquest, el username(email), contraseña y función 'done'
          */
         async(req, username, password, done) => {
-            const { first_name, last_name, email, age} = req.body;
+            const { first_name, last_name, email, age } = req.body;
             console.log("Registrando usuario:");
             console.log(req.body);
 
@@ -55,26 +49,24 @@ const initializePassport = () =>{
                     last_name,
                     email,
                     age,
-                    password: createHash(password)
-                    // cart
-                    // role
+                    password: createHash(password),
                 }
 
                 const result = await userModel.create(newUser)
 
-                //Todo salió bien, retornamos al usuario registrado
+                //Sale todo bien, retornamos al usuario registrado
                 return done(null, result);
 
+                
             } catch (error) {
                 return done("Error registrando el usuario: " + error);
             }
         }
     ))
 
+    // TODO: OJO si usamos Passport-JWT entonces reemplazamos el login de local strategy por JWT (el register sí puede mantenerse así)
+
     //Login
-
-    // TODO::: OJO si usamos Passport-JWT entonces reemplazamos por login de local strategy (el register sí puede mantenerse)
-
     /* =====================================
     =               JwtStrategy            =
     ===================================== */
@@ -118,8 +110,6 @@ const initializePassport = () =>{
     })
 }
 
-
-
 const cookieExtractor = req => {
     let token = null;
     console.log("Entrando a Cookie Extractor")
@@ -134,6 +124,5 @@ const cookieExtractor = req => {
     }
     return token
 }
-
 
 export default initializePassport;
