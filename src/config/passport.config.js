@@ -70,13 +70,13 @@ const initializePassport = () =>{
     /* =====================================
     =               JwtStrategy            =
     ===================================== */
-    passport.use('jwt', new JwtStrategy(
+    passport.use('current', new JwtStrategy(
         {
             jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
             secretOrKey: PRIVATE_KEY            
         },
         async (jwt_payload, done) => {
-            console.log("Entrando a passport strategy con JWT");
+            console.log("Entrando a passport strategy con Current");
             try {
                 console.log("JWT obtenido del payload:");
                 console.log(jwt_payload);

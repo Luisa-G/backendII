@@ -20,7 +20,7 @@ form.addEventListener('submit', e => {
                     console.log(document.cookie);
 
                     alert("login realizado con exito");
-                    window.location.replace('/users');
+                    window.location.replace('/users/current');
                 });
         } else if (result.status === 401){
             console.log(result);

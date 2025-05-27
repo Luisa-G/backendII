@@ -36,6 +36,12 @@ export const passportCall = (strategy) => {
             if(err) return next(err);
 
             if(!user) {
+                //si viene de vista html del navegador, redirige a otra vista
+                if (req.accepts('html')) {
+                    return res.render("current");
+                }
+                
+                //si viene de API, responde con JSON
                 return res.status(401).send({ error: info.messages ? info.messages : info.toString() });
             }
 
@@ -44,7 +50,7 @@ export const passportCall = (strategy) => {
 
             req.user = user
             next()
-            
+
         })(req, res, next);
     }
 }

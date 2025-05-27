@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import userModel from '../models/user.model.js'
-import { isValidPassword, generateJWToken } from '../utils.js';
+import { isValidPassword, generateJWToken, passportCall, authorization } from '../utils.js';
 import passport from 'passport';
 
 const router = Router();
@@ -38,7 +38,7 @@ router.post('/login', async (req, res) => {
 
         //Creamos la cookie y almacenamos el access_token en la cookie
         res.cookie('jwtCookieToken', access_token, {
-            maxAge: 60000,
+            maxAge: 600000,
             httpOnly: true //No se expone la cookie
         })
         
@@ -47,6 +47,16 @@ router.post('/login', async (req, res) => {
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
+})
+
+router.get('/current',
+    passportCall('current'),
+    authorization('user'),
+
+    (req, res) => {
+    res.render("current", {
+        user: req.user
+    })
 })
 
 router.get("/fail-register", (req, res) => {

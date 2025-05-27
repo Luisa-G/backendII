@@ -1,0 +1,11 @@
+<div>
+    {{#if user}}
+    <h1>Bienvenida, {{user.name}}</h1>
+    <p>Correo: {{user.email}}</p>
+    <p>Rol: {{user.role}}</p>
+    <p>--- Aquí verás tus productos ---</p>
+    {{else}}
+    <h1>Inicia sesión para ver tus productos</h1>
+    <a href="/users/login">Ingresa aquí</a>
+    {{/if}}
+</div>
