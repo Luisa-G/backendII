@@ -1,5 +1,4 @@
 import express from 'express';
-import usersRouter from './router/users.router.js'
 import mongoose from 'mongoose';
 import handlebars from 'express-handlebars';
 import cookieParser from 'cookie-parser';
@@ -38,9 +37,9 @@ app.get('/ping', (req, res) => {
 })
 
 //Routers
-// app.use('/', viewsRouter)
-app.use('/users', usersRouter)
-// app.use('/api/sessions', sessionsRouter)
+app.use('/', viewsRouter)
+app.use('/users', usersViewRouter)
+app.use('/api/sessions', sessionsRouter)
 
 // Server listen
 app.listen(SERVER_PORT, () => {
