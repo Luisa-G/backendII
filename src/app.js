@@ -6,11 +6,11 @@ import cookieParser from 'cookie-parser';
 
 //Passport
 import passport from 'passport';
-import initializePassport from './config-pre/passport.config.js';
+import initializePassport from './config/passport.config.js';
 
-import usersViewRouter from './routes-pre/users.views.router.js'
-import sessionsRouter from './routes-pre/sessions.router.js'
-import viewsRouter from './routes-pre/views.routes.js'
+import usersViewRouter from './router/users.views.router.js'
+import sessionsRouter from './router/sessions.router.js'
+import viewsRouter from './router/views.routes.js'
 import __dirname from './utils.js';
 
 const app = express();
