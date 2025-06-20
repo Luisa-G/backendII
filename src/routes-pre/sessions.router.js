@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import userModel from '../models/user.model.js'
+import userModel from '../models-pre/user.model.js'
 import { isValidPassword, generateJWToken, passportCall, authorization } from '../utils.js';
 import passport from 'passport';
 
