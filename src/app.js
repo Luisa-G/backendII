@@ -1,5 +1,4 @@
 import express from 'express';
-import usersRouter from './router/users.router.js'
 import mongoose from 'mongoose';
 import handlebars from 'express-handlebars';
 import cookieParser from 'cookie-parser';
@@ -10,7 +9,6 @@ import initializePassport from './config/passport.config.js';
 
 import usersViewRouter from './router/users.views.router.js'
 import sessionsRouter from './router/sessions.router.js'
-import viewsRouter from './router/views.routes.js'
 import __dirname from './utils.js';
 
 const app = express();
@@ -32,15 +30,9 @@ app.use(cookieParser("CoderS3cr3tC0d3"));
 initializePassport();
 app.use(passport.initialize());
 
-//Definir rutas
-app.get('/ping', (req, res) => {
-    res.send("pong")
-})
-
 //Routers
-// app.use('/', viewsRouter)
-app.use('/users', usersRouter)
-// app.use('/api/sessions', sessionsRouter)
+app.use('/users', usersViewRouter)
+app.use('/api/sessions', sessionsRouter)
 
 // Server listen
 app.listen(SERVER_PORT, () => {

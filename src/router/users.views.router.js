@@ -1,25 +1,19 @@
 import { Router } from 'express';
 import { passportCall, authorization } from '../utils.js';
+import { renderLogin, renderRegister, renderCurrent } from '../controller/users.view.controller.js'
+
 
 const router = new Router();
 
-//Aquí se renderizan las vistas de handlebars
-router.get('/login', (req, res) => {
-    res.render("login")
-})
+router.get('/login', renderLogin);
 
-router.get('/register', (req, res) => {
-    res.render("register")
-})
+router.get('/register', renderRegister)
 
 router.get('/current',
     passportCall('current'),
     authorization('user'),
+    renderCurrent
+)
 
-    (req, res) => {
-    res.render("current", {
-        user: req.user
-    })
-})
 
 export default router

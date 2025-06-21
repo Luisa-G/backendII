@@ -1,70 +1,17 @@
 import { Router } from 'express';
-import userModel from '../services/dao/mongo/models/user.model.js'
-import { isValidPassword, generateJWToken, passportCall, authorization } from '../utils.js';
 import passport from 'passport';
+import { registerResponse, loginUser, failRegister, failLogin } from '../controller/sessions.controller.js'
 
 const router = Router();
 
 // Register
-router.post('/register', passport.authenticate('register', { failureRedirect: '/api/sessions/fail-register', session: false }), async (req, res) => {
-    res.send({ status: "success", message: "Usuario creado con exito" });
-})
+router.post('/register', passport.authenticate('register', { failureRedirect: '/api/sessions/fail-register', session: false }), registerResponse)
 
 // Login
-router.post('/login', async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        const user = await userModel.findOne({ email: email });
-        console.log("Usuario encontrado para login:");
-        console.log(user);
-        if (!user) {
-            console.warn("User doesn't exists with username: " + email);
-            return res.status(204).send({ error: "Not found", message: "Usuario no encontrado con username: " + email });
-        }
+router.post('/login', loginUser)
 
-        if (!isValidPassword(user, password)) {
-            console.warn("Invalid credentials for user: " + email);
-            return res.status(401).send({ status: "error", error: "El usuario y la contraseña no coinciden!" });
-        }
+router.get("/fail-register", failRegister);
 
-        const tokenUser = {
-            name: `${user.first_name} ${user.last_name}`,
-            email: user.email,
-            age: user.age,
-            role: user.role
-        };
-        const access_token = generateJWToken(tokenUser);
-        console.log(access_token);
-
-        //Creamos la cookie y almacenamos el access_token en la cookie
-        res.cookie('jwtCookieToken', access_token, {
-            maxAge: 600000,
-            httpOnly: true //No se expone la cookie
-        })
-        
-        res.send({ status: "login success" });
-
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-})
-
-router.get('/current',
-    passportCall('current'),
-    authorization('user'),
-
-    (req, res) => {
-    res.render("current", {
-        user: req.user
-    })
-})
-
-router.get("/fail-register", (req, res) => {
-    res.status(401).send({ error: "Failed to process register!" });
-});
-
-router.get("/fail-login", (req, res) => {
-    res.status(401).send({ error: "Failed to process login!" });
-});
+router.get("/fail-login", failLogin);
 
 export default router;

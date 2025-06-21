@@ -3,6 +3,9 @@ import passportLocal from "passport-local";
 import jwtStrategy from 'passport-jwt';
 import userModel from "../services/dao/mongo/models/user.model.js";
 import { PRIVATE_KEY, createHash } from "../utils.js";
+import UserRepository from "../services/repository/user.repository.js";
+
+const userRepo = new UserRepository()
 
 //Declaramos la estrategia
 const localStrategy = passportLocal.Strategy;
@@ -37,7 +40,7 @@ const initializePassport = () =>{
 
             try {
                 // Verifico si el user que me pasan ya existe
-                const userExists = await userModel.findOne({ email })
+                const userExists = await userRepo.getByEmail(email)
                 if (userExists) {
                     console.log("El usuario ya existe");
                     return done(null, false); //Retorna 'false' indicando que la autenticación falló
@@ -52,7 +55,7 @@ const initializePassport = () =>{
                     password: createHash(password),
                 }
 
-                const result = await userModel.create(newUser)
+                const result = await userRepo.createUser(newUser)
 
                 //Sale todo bien, retornamos al usuario registrado
                 return done(null, result);
